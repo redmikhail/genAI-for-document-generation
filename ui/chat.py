@@ -51,7 +51,21 @@ scripts = """
 async () => {
     // set ratingFn() function on globalThis, so you html onlclick can access it
     globalThis.ratingFn = (val) => {
-      document.getElementById('rating_text').innerHTML = "Rating is " + val;
+        // Send the rating to your API endpoint
+        fetch('http://localhost:5001/store_rating', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ rating: val }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('rating_text').innerHTML = "Rating is " + val;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 }
 """
