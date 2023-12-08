@@ -1,18 +1,18 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: gradio-hftgi-rag-redis-mistral
+  name: gradio-hftgi-rag-redis-flan
   labels:
-    app: gradio-hftgi-rag-redis-mistral
+    app: gradio-hftgi-rag-redis-flan
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gradio-hftgi-rag-redis-mistral
+      app: gradio-hftgi-rag-redis-flan
   template:
     metadata:
       labels:
-        app: gradio-hftgi-rag-redis-mistral
+        app: gradio-hftgi-rag-redis-flan
     spec:
       volumes:
         - name: redis-schema
@@ -67,7 +67,7 @@ spec:
               value: Talk with your documentation
             - name: INFERENCE_SERVER_URL
               value: >-
-                http://hf-text-generation-inference-server-mistral.$(NAMESPACE).svc.cluster.local:3000
+                http://hf-text-generation-inference-server-flan.$(NAMESPACE).svc.cluster.local:3000
             - name: REDIS_URL
               value: >-
                 redis://default:$(DB_PASS)@my-doc-headless.$(NAMESPACE).svc.cluster.local:10225
