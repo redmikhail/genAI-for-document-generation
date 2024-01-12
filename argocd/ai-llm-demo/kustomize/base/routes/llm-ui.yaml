@@ -4,16 +4,14 @@ metadata:
   name: llm-ui
   labels:
     app: gradio-hftgi-rag-redis
-  annotations:
-    haproxy.router.openshift.io/balance: roundrobin
 spec:
   to:
     kind: Service
-    name: gradio-hftgi-rag-redis-mistral
+    name: gradio-hftgi-rag-redis-model1
     weight: 50
   alternateBackends:
     - kind: Service
-      name: gradio-hftgi-rag-redis-flan
+      name: gradio-hftgi-rag-redis-model2
       weight: 50
   port:
     targetPort: http

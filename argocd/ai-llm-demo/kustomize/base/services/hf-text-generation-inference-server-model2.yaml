@@ -1,9 +1,9 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: hf-text-generation-inference-server-flan
+  name: hf-text-generation-inference-server-model2
   labels:
-    app: hf-text-generation-inference-server-flan
+    app: hf-text-generation-inference-server-model2
 spec:
   clusterIP: None
   ipFamilies:
@@ -16,4 +16,4 @@ spec:
   internalTrafficPolicy: Cluster
   type: ClusterIP
   selector:
-    app: hf-text-generation-inference-server-flan
+    app: hf-text-generation-inference-server-model2
