@@ -26,7 +26,7 @@ spec:
       "gnetId": null,
       "graphTooltip": 0,
       "id": 2,
-      "iteration": 1703201965257,
+      "iteration": 1705107864294,
       "links": [],
       "panels": [
         {
@@ -97,8 +97,8 @@ spec:
           "scopedVars": {
             "ModelID": {
               "selected": false,
-              "text": "google/flan-t5-xl",
-              "value": "google/flan-t5-xl"
+              "text": "meta-llama/Llama-2-7b-chat-hf",
+              "value": "meta-llama/Llama-2-7b-chat-hf"
             }
           },
           "targets": [
@@ -166,7 +166,7 @@ spec:
           },
           "pluginVersion": "7.5.17",
           "repeatDirection": "h",
-          "repeatIteration": 1703201965257,
+          "repeatIteration": 1705107864294,
           "repeatPanelId": 2,
           "scopedVars": {
             "ModelID": {
@@ -246,8 +246,8 @@ spec:
           "scopedVars": {
             "ModelID": {
               "selected": false,
-              "text": "google/flan-t5-xl",
-              "value": "google/flan-t5-xl"
+              "text": "meta-llama/Llama-2-7b-chat-hf",
+              "value": "meta-llama/Llama-2-7b-chat-hf"
             }
           },
           "targets": [
@@ -318,7 +318,7 @@ spec:
           },
           "pluginVersion": "7.5.17",
           "repeatDirection": "h",
-          "repeatIteration": 1703201965257,
+          "repeatIteration": 1705107864294,
           "repeatPanelId": 10,
           "scopedVars": {
             "ModelID": {
@@ -390,8 +390,8 @@ spec:
           "scopedVars": {
             "ModelID": {
               "selected": false,
-              "text": "google/flan-t5-xl",
-              "value": "google/flan-t5-xl"
+              "text": "meta-llama/Llama-2-7b-chat-hf",
+              "value": "meta-llama/Llama-2-7b-chat-hf"
             }
           },
           "targets": [
@@ -454,7 +454,7 @@ spec:
             "textMode": "auto"
           },
           "pluginVersion": "7.5.17",
-          "repeatIteration": 1703201965257,
+          "repeatIteration": 1705107864294,
           "repeatPanelId": 12,
           "scopedVars": {
             "ModelID": {
@@ -548,23 +548,15 @@ spec:
           "targets": [
             {
               "exemplar": true,
-              "expr": "request_duration_seconds{model_id=\"google/flan-t5-xl\", namespace=\"${namespace}\"}",
+              "expr": "request_duration_seconds{namespace=\"${namespace}\"}",
               "interval": "",
               "legendFormat": "{{model_id}}",
               "refId": "A"
-            },
-            {
-              "exemplar": true,
-              "expr": "request_duration_seconds{model_id=\"mistralai/Mistral-7B-Instruct-v0.1\", namespace=\"${namespace}\"}",
-              "hide": false,
-              "interval": "",
-              "legendFormat": "{{model_id}}",
-              "refId": "B"
             }
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "RESPONSE TIME ",
+          "title": "RESPONSE TIME  UI -> INFERENCE SERVER",
           "transparent": true,
           "type": "timeseries"
         }
@@ -609,7 +601,8 @@ spec:
           {
             "allValue": null,
             "current": {
-              "selected": false,
+              "selected": true,
+              "tags": [],
               "text": [
                 "All"
               ],
@@ -651,5 +644,5 @@ spec:
       "timezone": "",
       "title": "MODEL FEEDBACK/RATING",
       "uid": "HtUdEp4Ik",
-      "version": 34
+      "version": 3
     }

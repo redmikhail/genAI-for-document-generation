@@ -21,6 +21,15 @@ patchesJSON6902:
         path: /spec/namespaceSelector/matchNames/0
         value: tgis-llm-demo
   - target:
+      group: monitoring.coreos.com
+      version: v1
+      kind: ServiceMonitor
+      name: ai-llm-tgis-sm
+    patch: |-
+      - op: replace
+        path: /spec/namespaceSelector/matchNames/0
+        value: tgis-llm-demo
+  - target:
       group: rbac.authorization.k8s.io
       version: v1
       kind: ClusterRoleBinding
