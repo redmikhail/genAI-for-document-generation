@@ -75,7 +75,8 @@ spec:
               value: docs
             - name: MAX_NEW_TOKENS
               value: '1024'
-            - name: TOP_Kmistral
+            - name: TOP_K
+              value: '10'
             - name: TOP_P
               value: '0.95'
             - name: TYPICAL_P
