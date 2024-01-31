@@ -2,6 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - gradio-hftgi-rag-redis-model1.yaml
-  - gradio-hftgi-rag-redis-model2.yaml
+  # - gradio-hftgi-rag-redis-model2.yaml
   - hf-text-generation-inference-server-model1.yaml
   - hf-text-generation-inference-server-model2.yaml
