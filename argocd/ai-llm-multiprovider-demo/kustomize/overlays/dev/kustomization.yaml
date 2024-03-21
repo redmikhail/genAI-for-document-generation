@@ -22,6 +22,15 @@ patchesJSON6902:
       - op: replace
         path: /subjects/0/namespace
         value: tgis-llm-demo
+  - target:
+      group: rbac.authorization.k8s.io
+      version: v1
+      kind: ClusterRoleBinding
+      name: 'system:openshift:scc:redis-enterprise-privileged'
+    patch: |-
+      - op: replace
+        path: /subjects/0/namespace
+        value: tgis-llm-demo
 resources:
   - ../../base/security
   - ../../base/operators.coreos.com/operatorgroups/redis

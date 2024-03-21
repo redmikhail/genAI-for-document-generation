@@ -1,6 +1,8 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   name: models-cache-model1
 spec:
   accessModes:

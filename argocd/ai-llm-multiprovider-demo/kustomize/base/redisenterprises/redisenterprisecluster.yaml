@@ -4,6 +4,7 @@ metadata:
   name: rec
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   serviceAccountName: rec
   redisEnterpriseNodeResources:
@@ -31,7 +32,7 @@ spec:
     imagePullPolicy: IfNotPresent
     repository: registry.connect.redhat.com/redislabs/redis-enterprise
   podStartingPolicy:
-    enabled: true
+    enabled: false
     startingThresholdSeconds: 540
   redisEnterpriseServicesRiggerImageSpec:
     imagePullPolicy: ''
