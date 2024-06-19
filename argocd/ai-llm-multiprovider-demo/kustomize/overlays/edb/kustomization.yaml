@@ -1,0 +1,43 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+generatorOptions:
+  disableNameSuffixHash: true
+kind: Kustomization
+namespace: rag-llm-mmikhail
+patchesJSON6902:
+  - patch: |-
+      - op: replace
+        path: /spec/targetNamespaces/0
+        value: rag-llm-mmikhail
+    target:
+      group: operators.coreos.com
+      kind: OperatorGroup
+      name: edb
+      version: v1
+  - target:
+      group: rbac.authorization.k8s.io
+      version: v1
+      kind: RoleBinding
+      name: 'postgres-rb'
+    patch: |-
+      - op: replace
+        path: /subjects/0/namespace
+        value: rag-llm-mmikhail
+resources:
+# redis stack server deployment
+#  - ../../base/pgvector/persistentvolumeclaims
+#  - ../../base/pgvector/deployments
+#  - ../../base/pgvector/services
+#  - ../../base/pgvector/jobs
+  - ../../base/edb/operators.coreos.com/operatorgroups/edb
+  - ../../base/edb/operators.coreos.com/subscriptions/edb
+  - ../../base/edb/cluster
+  - ../../base/edb/security
+  - ../../base/edb/jobs
+  # - deployments
+  # - ../../base/rag-llm/services
+  # - ../../base/rag-llm/configmaps
+  # - ../../base/rag-llm/persistentvolumeclaims
+  # - ../../base/rag-llm/routes
+#  - ../../base/rag-llm/jobs
+# Overriding default RedisEnterprise installation
+  - namespaces

@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+generatorOptions:
+  disableNameSuffixHash: true
+kind: Kustomization
+namespace: rag-llm
+secretGenerator:
+  - name: vector-db-config
+    literals:
+      - DB_TYPE=REDIS
+      - REDIS_URL=redis://redis-stack-server:6379
+      - REDIS_INDEX=docs
+resources:
+# redis stack server deployment
+  - ../../base/redis-stack-server/persistentvolumeclaims
+  - ../../base/redis-stack-server/deployments
+  - ../../base/redis-stack-server/services
+  - ../../base/rag-llm/deployments
+  - ../../base/rag-llm/services
+  - ../../base/rag-llm/configmaps
+  - ../../base/rag-llm/persistentvolumeclaims
+  - ../../base/rag-llm/routes
+  - ../../base/rag-llm/jobs
+# Overriding default RedisEnterprise installation
+  - namespaces

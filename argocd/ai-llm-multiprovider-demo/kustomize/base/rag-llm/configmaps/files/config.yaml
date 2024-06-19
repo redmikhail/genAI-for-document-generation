@@ -1,0 +1,26 @@
+llm_providers:
+  - name: "Hugging Face"
+    enabled: True
+    models:
+      - name: mistral-community/Mistral-7B-v0.2
+        weight: 1
+        url: http://hf-text-generation-inference-server-model1:3000
+        params:
+          - name: max_new_tokens
+            value: 1024
+          - name: temperature
+            value: 0.01
+          - name: top_k
+            value: 10
+          - name: top_p
+            value: 0.95
+          - name: repetition_penalty
+            value: 1.03
+          - name: verbose
+            value: False
+          - name: typical_p
+            value: 0.95
+default_provider: "Hugging Face"
+default_model: "mistral-community/Mistral-7B-v0.2"
+# type values=(default, round_robin,  all)
+type: all
