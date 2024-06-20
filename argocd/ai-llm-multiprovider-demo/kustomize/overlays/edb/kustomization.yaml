@@ -2,17 +2,43 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 generatorOptions:
   disableNameSuffixHash: true
 kind: Kustomization
-namespace: rag-llm-mmikhail
+namespace: rag-llm
 patchesJSON6902:
-  - patch: |-
-      - op: replace
-        path: /spec/targetNamespaces/0
-        value: rag-llm-mmikhail
-    target:
+  # - target:
+  #     kind: Job
+  #     name: populate-vectordb
+  #   patch: |-
+  #     - op: remove
+  #       path: /spec/template/spec/containers/0/env/0
+  - target:
+      kind: Job
+      name: populate-vectordb
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value: {"name":"DB_PASS", "valueFrom":{"secretKeyRef":{"name":"vectordb-app","key":"password"}}}
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value: {"name":"PGVECTOR_URL","value":"postgresql+psycopg://vectordb:$(DB_PASS)@vectordb-rw:5432/vectordb"}
+  - target:
+      kind: Deployment
+      name: ui-multiprovider-rag
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value: {"name":"DB_PASS", "valueFrom":{"secretKeyRef":{"name":"vectordb-app","key":"password"}}}
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value: {"name":"PGVECTOR_URL","value":"postgresql+psycopg://vectordb:$(DB_PASS)@vectordb-rw:5432/vectordb"}
+  - target:
       group: operators.coreos.com
       kind: OperatorGroup
       name: edb
       version: v1
+    patch: |-
+      - op: replace
+        path: /spec/targetNamespaces/0
+        value: rag-llm
   - target:
       group: rbac.authorization.k8s.io
       version: v1
@@ -21,23 +47,24 @@ patchesJSON6902:
     patch: |-
       - op: replace
         path: /subjects/0/namespace
-        value: rag-llm-mmikhail
+        value: rag-llm
+secretGenerator:
+  - name: vector-db-config
+    literals:
+      - DB_TYPE=PGVECTOR
+      - PGVECTOR_COLLECTION_NAME=rhoai-doc
 resources:
-# redis stack server deployment
-#  - ../../base/pgvector/persistentvolumeclaims
-#  - ../../base/pgvector/deployments
-#  - ../../base/pgvector/services
-#  - ../../base/pgvector/jobs
+# EDB database deployment
   - ../../base/edb/operators.coreos.com/operatorgroups/edb
   - ../../base/edb/operators.coreos.com/subscriptions/edb
   - ../../base/edb/cluster
   - ../../base/edb/security
   - ../../base/edb/jobs
-  # - deployments
-  # - ../../base/rag-llm/services
-  # - ../../base/rag-llm/configmaps
-  # - ../../base/rag-llm/persistentvolumeclaims
-  # - ../../base/rag-llm/routes
-#  - ../../base/rag-llm/jobs
-# Overriding default RedisEnterprise installation
+# RAG LLM application deployment
+  - ../../base/rag-llm/deployments
+  - ../../base/rag-llm/services
+  - ../../base/rag-llm/configmaps
+  - ../../base/rag-llm/persistentvolumeclaims
+  - ../../base/rag-llm/routes
+  - ../../base/rag-llm/jobs
   - namespaces
