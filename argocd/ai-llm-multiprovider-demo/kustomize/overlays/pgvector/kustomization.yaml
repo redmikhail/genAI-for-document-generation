@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+generatorOptions:
+  disableNameSuffixHash: true
+kind: Kustomization
+namespace: rag-llm
+secretGenerator:
+  - name: postgresql
+    literals:
+      - name=vectordb
+      - password=vectordb
+      - user=vectordb
+  - name: vector-db-config
+    literals:
+      - DB_TYPE=PGVECTOR
+      - PGVECTOR_URL=postgresql+psycopg://vectordb:vectordb@postgresql:5432/vectordb
+      - PGVECTOR_COLLECTION_NAME=rhoai-doc
+patchesJSON6902:
+  - target:
+      group: rbac.authorization.k8s.io
+      version: v1
+      kind: RoleBinding
+      name: 'postgres-rb'
+    patch: |-
+      - op: replace
+        path: /subjects/0/namespace
+        value: rag-llm
+resources:
+# redis stack server deployment
+  - ../../base/pgvector/persistentvolumeclaims
+  - ../../base/pgvector/deployments
+  - ../../base/pgvector/services
+  - ../../base/pgvector/jobs
+  - ../../base/pgvector/security
+  - ../../base/rag-llm/deployments
+  - ../../base/rag-llm/services
+  - ../../base/rag-llm/configmaps
+  - ../../base/rag-llm/persistentvolumeclaims
+  - ../../base/rag-llm/routes
+  - ../../base/rag-llm/jobs
+# Overriding default RedisEnterprise installation
+  - namespaces

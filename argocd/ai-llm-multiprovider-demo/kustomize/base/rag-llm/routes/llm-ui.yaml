@@ -1,0 +1,16 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: llm-ui
+  labels:
+    app: ui-multiprovider-rag
+spec:
+  to:
+    kind: Service
+    name: ui-multiprovider-rag
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  wildcardPolicy: None
