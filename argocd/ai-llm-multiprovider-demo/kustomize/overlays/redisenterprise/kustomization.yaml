@@ -1,0 +1,70 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+generatorOptions:
+  disableNameSuffixHash: true
+kind: Kustomization
+namespace: rag-llm
+patchesJSON6902:
+  # - target:
+  #     kind: Job
+  #     name: populate-vectordb
+  #   patch: |-
+  #     - op: remove
+  #       path: /spec/template/spec/containers/0/env/0
+  - target:
+      kind: Job
+      name: populate-vectordb
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value: {"name":"DB_PASS", "valueFrom":{"secretKeyRef":{"name":"redb-vectordb","key":"password"}}}
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value: {"name":"REDIS_URL","value":"redis://default:$(DB_PASS)@vectordb-headless.$(NAMESPACE).svc.cluster.local:10225"}
+  - target:
+      kind: Deployment
+      name: ui-multiprovider-rag
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value: {"name":"DB_PASS", "valueFrom":{"secretKeyRef":{"name":"redb-vectordb","key":"password"}}}
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value: {"name":"REDIS_URL","value":"redis://default:$(DB_PASS)@vectordb-headless.$(NAMESPACE).svc.cluster.local:10225"}
+  - target:
+      group: operators.coreos.com
+      kind: OperatorGroup
+      name: redis
+      version: v1
+    patch: |-
+      - op: replace
+        path: /spec/targetNamespaces/0
+        value: rag-llm
+  - target:
+      group: rbac.authorization.k8s.io
+      version: v1
+      kind: ClusterRoleBinding
+      name: 'system:openshift:scc:redis-enterprise-privileged'
+    patch: |-
+      - op: replace
+        path: /subjects/0/namespace
+        value: rag-llm
+secretGenerator:
+  - name: vector-db-config
+    literals:
+      - DB_TYPE=REDIS
+      - REDIS_INDEX=docs
+resources:
+# Redis Enterprise database deployment
+  - ../../base/redis-enterprise/operators.coreos.com/operatorgroups/redis
+  - ../../base/redis-enterprise/operators.coreos.com/subscriptions/redis
+  - ../../base/redis-enterprise/redisenterprises
+  - ../../base/redis-enterprise/redisenterprisedatabases
+  - ../../base/redis-enterprise/security
+# RAG LLM application deployment
+  - ../../base/rag-llm/deployments
+  - ../../base/rag-llm/services
+  - ../../base/rag-llm/configmaps
+  - ../../base/rag-llm/persistentvolumeclaims
+  - ../../base/rag-llm/routes
+  - ../../base/rag-llm/jobs
+  - namespaces
