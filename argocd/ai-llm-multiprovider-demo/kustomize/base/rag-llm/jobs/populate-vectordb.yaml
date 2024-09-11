@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: populate-vectordb
-        image: quay.io/ecosystem-appeng/embeddingjob:0.0.3
+        image: quay.io/ecosystem-appeng/embeddingjob:0.0.4
         command: ["/usr/bin/bash", "/app/entrypoint.sh"]
         env:
           - name: NAMESPACE

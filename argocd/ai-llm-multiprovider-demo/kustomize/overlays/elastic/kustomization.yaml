@@ -1,0 +1,50 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+generatorOptions:
+  disableNameSuffixHash: true
+kind: Kustomization
+namespace: rag-llm
+patchesJSON6902:
+# Elastic auto-generate password for elastic server, using this auto-generated password       
+  - target:
+      kind: Job
+      name: populate-vectordb
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value: {"name":"ELASTIC_PASSWORD", "valueFrom":{"secretKeyRef":{"name":"es-vectordb-es-elastic-user","key":"elastic"}}}
+# Elastic auto-generate password for elastic server, using this auto-generated password        
+  - target:
+      kind: Deployment
+      name: ui-multiprovider-rag
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value: {"name":"ELASTIC_PASSWORD", "valueFrom":{"secretKeyRef":{"name":"es-vectordb-es-elastic-user","key":"elastic"}}}
+  - target:
+      group: operators.coreos.com
+      kind: Subscription
+      name: elasticsearch-eck-operator-certified
+      version: v1alpha1
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: openshift-operators
+secretGenerator:
+  - name: vector-db-config
+    literals:
+      - DB_TYPE=ELASTIC
+      - ELASTIC_INDEX=docs
+      - ELASTIC_URL=http://es-vectordb-es-http:9200
+      - ELASTIC_USER=elastic
+resources:
+# EDB database deployment
+  - ../../base/elastic/operators.coreos.com/subscriptions/elastic
+  - ../../base/elastic/cluster
+# RAG LLM application deployment
+  - ../../base/rag-llm/deployments
+  - ../../base/rag-llm/services
+  - ../../base/rag-llm/configmaps
+  - ../../base/rag-llm/persistentvolumeclaims
+  - ../../base/rag-llm/routes
+  - ../../base/rag-llm/jobs
+  - namespaces
