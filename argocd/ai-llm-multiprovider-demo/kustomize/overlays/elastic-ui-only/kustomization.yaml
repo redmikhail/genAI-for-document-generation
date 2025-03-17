@@ -41,8 +41,8 @@ resources:
   - ../../base/elastic/operators.coreos.com/subscriptions/elastic
   - ../../base/elastic/cluster
 # RAG LLM application deployment
-  - ../../base/rag-llm/deployments
-  - ../../base/rag-llm/services
+  - deployments
+  - services
   - ../../base/rag-llm/configmaps
   - ../../base/rag-llm/persistentvolumeclaims
   - ../../base/rag-llm/routes
