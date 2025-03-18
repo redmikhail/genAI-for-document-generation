@@ -15,25 +15,25 @@ patchesJSON6902:
       group: monitoring.coreos.com
       version: v1
       kind: ServiceMonitor
-      name: ai-llm-gradio-sm
+      name: rag-gradio-sm
     patch: |-
       - op: replace
         path: /spec/namespaceSelector/matchNames/0
-        value: tgis-llm-demo
+        value: rag-llm
   - target:
       group: monitoring.coreos.com
       version: v1
       kind: ServiceMonitor
-      name: ai-llm-tgis-sm
+      name: rag-tgis-sm
     patch: |-
       - op: replace
         path: /spec/namespaceSelector/matchNames/0
-        value: tgis-llm-demo
+        value: rag-llm
   - target:
       group: rbac.authorization.k8s.io
       version: v1
       kind: ClusterRoleBinding
-      name: ai-llm-monitoring-crb
+      name: ai-rag-monitoring-crb
     patch: |-
       - op: replace
         path: /subjects/0/namespace
@@ -46,6 +46,5 @@ resources:
   - ../../base/grafana
   - ../../base/grafanadashboard
   - ../../base/servicemonitor
-  - ../../base/rbac/clusterrole
   - ../../base/rbac/clusterrolebinding
   - namespaces
