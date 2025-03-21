@@ -111,5 +111,8 @@ spec:
         - key: odh-notebook
           value: 'true'
           effect: NoSchedule
+        - key: nvidia.com/gpu
+          effect: NoSchedule
+          value: 'true'
   strategy:
     type: Recreate
